@@ -3,10 +3,11 @@ import fs from 'fs'
 import express from 'express'
 import bodyParser from 'body-parser'
 const app = express()
-const port = 5000
+const port = 4000
 app.use(bodyParser.json()); // Para datos en formato JSON
 app.use(bodyParser.urlencoded({ extended: true })); // Para datos codificados en URL
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 ////////////////////
 const data = {
