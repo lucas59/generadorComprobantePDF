@@ -2,6 +2,7 @@ import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import fs from 'fs'
 import express from 'express'
 import bodyParser from 'body-parser'
+import path from 'path';
 const app = express()
 const port = 4000
 app.use(bodyParser.json()); // Para datos en formato JSON
