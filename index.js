@@ -7,10 +7,8 @@ const app = express()
 const port = 4000
 app.use(bodyParser.json()); // Para datos en formato JSON
 app.use(bodyParser.urlencoded({ extended: true })); // Para datos codificados en URL
-app.use(express.static('public'))
+app.use(express.static(__dirname + '/public')); // Para servir archivos estáticos
 
-
-////////////////////
 const data = {
   cliente: 'Nombre del Cliente',
   address: 'Dirección Principal',
