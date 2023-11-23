@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // Para datos codificados en
 app.use(express.static(__dirname + '/public')); // Para servir archivos estáticos
 
 const data = {
+  nBoleta: 'Número de Boleta',
   cliente: 'Nombre del Cliente',
   address: 'Dirección Principal',
   address2: 'Dirección Secundaria',
@@ -17,7 +18,6 @@ const data = {
   phone: 'Número de Teléfono',
   fecha: 'Fecha',
   vence: 'Fecha de Vencimiento',
-  nBoleta: 'Número de Boleta',
   matricula: 'IAG 3123',
   totalAPagar: 'Total a Pagar',
   total: 'Total',
@@ -38,7 +38,7 @@ async function main (data){
 
 
 ///////////////////
-  const url = 'https://drive.google.com/u/0/uc?id=1N4Z-A708S44HI4GucSTcFnsx9FMRQpHf&export=download'
+  const url = 'https://drive.google.com/u/0/uc?id=14X7-FPXpWZPSiLEdpTcpF_uJtVKg7ZAH&export=download'
   // const buffer = fs.readFileSync(url)
 
   // use node fetch to get the pdf bytes from the url
@@ -89,12 +89,35 @@ function setDataInForm(form, data) {
 
 // main()
 
+function calcularMontoIva(data){
+  const newMontoIva = parseFloat(data.monto) * 0.22 
+  data.montoIva = newMontoIva.toFixed(2).toString()
+  data.iva = '22'
+}
 
+function calcularMonto(data) {
+  data.monto = (parseFloat(data.precioU) * parseFloat(data.cantidad)).toFixed(2).toString()
+}
 
+function calcularSubTotal(data){
+  data.subTotal = data.motno
+}
+
+function calcularTotal(data){
+  const newTotal = parseFloat(data.subTotal) + parseFloat(data.montoIva)
+  data.total = newTotal.toFixed(2).toString()
+}
 
 app.post('/generate', async (req, res) => {
   const data = req.body
+  
+  calcularMontoIva(data)
+  // calcularMonto(data)
+  // calcularSubTotal(data)
+  // calcularTotal(data)
+
   console.log("Data: ",data)
+
   if (data === undefined) {
     res.status(400).send('Invalid request')
     return
@@ -102,7 +125,7 @@ app.post('/generate', async (req, res) => {
   const pdfBytes = await main(data)
 
   res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', 'attachment; filename="comprobante.pdf"');
+  res.setHeader('Content-Disposition', 'attachment; filename="' + data.nBoleta + '-' + data.cliente + '.pdf"');
 
   res.send(Buffer.from(pdfBytes, 'base64')); // Si los bytes están en formato base64
 })
