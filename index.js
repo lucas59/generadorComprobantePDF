@@ -1,13 +1,13 @@
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
-import fs from 'fs'
+import { PDFDocument } from 'pdf-lib';
 import express from 'express'
 import bodyParser from 'body-parser'
-import path from 'path';
+import fetch from 'node-fetch';
+
 const app = express()
 const port = 4000
 app.use(bodyParser.json()); // Para datos en formato JSON
 app.use(bodyParser.urlencoded({ extended: true })); // Para datos codificados en URL
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'))
 
 
 ////////////////////
@@ -40,9 +40,12 @@ async function main (data){
 
 
 ///////////////////
-  const url = './Semi2.pdf'
-  const buffer = fs.readFileSync(url)
+  const url = 'https://drive.google.com/u/0/uc?id=1N4Z-A708S44HI4GucSTcFnsx9FMRQpHf&export=download'
+  // const buffer = fs.readFileSync(url)
 
+  // use node fetch to get the pdf bytes from the url
+  const response = await fetch(url)
+  const buffer = await response.arrayBuffer()
 
   const pdfDoc = await PDFDocument.load(buffer)
 
@@ -114,4 +117,4 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-module.exports = app
+export default app
