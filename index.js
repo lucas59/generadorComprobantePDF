@@ -1,7 +1,7 @@
-import { PDFDocument } from 'pdf-lib';
-import express from 'express'
-import bodyParser from 'body-parser'
-import fetch from 'node-fetch';
+const { PDFDocument } = require( 'pdf-lib');
+const express = require( 'express')
+const bodyParser = require( 'body-parser')
+const fetch = require( 'node-fetch');
 
 const app = express()
 const port = 4000
@@ -117,4 +117,4 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-export default app
+module.exports = app;
